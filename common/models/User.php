@@ -191,8 +191,9 @@ class User extends ActiveRecord implements IdentityInterface
     public function getProjects() {
         return $this->hasMany(Project::className(), ['user_id' => 'id']);
     }
-
+/*
     public function getProjectItems() {
+//
         $items = [];
         $items[] = ['label' => 'Добавить проект', 'url' => ['/project/add-project']];
         $models = $this->findOne(Yii::$app->user->identity->id)->getProjects()->all();
@@ -200,5 +201,15 @@ class User extends ActiveRecord implements IdentityInterface
             $items[] = ['label' => $model->projectname, 'url' => '/project/view/' . $model->id . '/'];
         }
         return $items;
+//
+        $items = [];
+        $items[] = ['label' => 'Добавить проект', 'url' => ['/project/add-project']];
+        print_r($this->projects);
+        exit;
+        foreach($this->projects as $model) {
+            $items[] = ['label' => $model->projectname, 'url' =>['/project/view', 'id' => $model->id]];
+        }
+        return $items;
     }
+*/
 }

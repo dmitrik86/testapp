@@ -31,7 +31,7 @@ class Keyword extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            ['keyword', 'filter', 'filter' => 'trim'],
+            ['keyword', 'trim'],
             ['keyword', 'required', 'message' => 'Это поле обязательно'],
             ['keyword', 'unique', 'targetClass' => '\common\models\Keyword', 'message' => 'Это ключевое слово уже есть в базе'],
             ['keyword', 'string', 'min' => 2, 'max' => 255, 'message' => 'Ключевое слово должно состоять минимум из 2  и максимум из 255 символов'],

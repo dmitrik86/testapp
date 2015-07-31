@@ -3,6 +3,7 @@ namespace frontend\controllers;
 
 use Yii;
 use common\models\Project;
+use common\models\ProjectService;
 use common\models\Keyword;
 use common\models\ProjectKeywordRelation;
 use yii\base\InvalidParamException;
@@ -12,16 +13,13 @@ use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use yii\data\ArrayDataProvider;
+use yii\data\ActiveDataProvider;
 
 /**
  * Site controller
  */
 class ProjectController extends Controller
 {
-    const STATUS_ACTIVE = 'active';
-    const STATUS_DELETED = 'deleted';
-    const STATUS_DISABLED = 'disabled';
     
     /**
      * @inheritdoc
@@ -31,12 +29,17 @@ class ProjectController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['add'],
+                'only' => ['actionView', 'actionAddProject'],
                 'rules' => [
                     [
-                        'actions' => ['add-project'],
+                        'actions' => ['actionAddProject'],
                         'allow' => true,
-                        'roles' => ['add-project'],
+                        'roles' => ['actionAddProject'],
+                    ],
+                    [
+                        'actions' => ['actionView'],
+                        'allow' => true,
+                        'roles' => ['actionView'],
                     ],
                 ],
                 'denyCallback' => function ($rule, $action) {
@@ -65,9 +68,7 @@ class ProjectController extends Controller
     public function actionView($id)
     {
     	$model = $this->findModel($id);
-		$dataProvider = new ArrayDataProvider([
-		    'allModels' => $model->keywords,
-		]);
+		$dataProvider = new ActiveDataProvider(['query' => $model->getKeywords()]);
 		return $this->render('view', [
             'model' => $model,
 //            'keyword' => $projectKeywords
@@ -77,8 +78,9 @@ class ProjectController extends Controller
 
     public function actionAddProject()
     {
+/*
         $model = new Project();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()/* && $model->save()*/) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
         	$model->status = self::STATUS_ACTIVE;
         	$model->user_id = Yii::$app->user->id;
 	        $model->save();
@@ -95,8 +97,20 @@ class ProjectController extends Controller
                 'model' => $model,
             ]);
         }
-    }
+*/
+        $service = new ProjectService();
+        $model = new Project();
+        if($model->load(Yii::$app->request->post()) && $model->validate()) {
+        	$project_id = $service->addProject($model);
+        	return $this->redirect(['project/view/' . $project_id . '/']);
+        } else {
+            return $this->render('addProject', [
+                'model' => $model,
+            ]);
+        }
 
+    }
+/*
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
@@ -116,7 +130,7 @@ class ProjectController extends Controller
             ]);
         }
     }
-
+*/
     public function actionAddKeywordToProject() {
 
     }

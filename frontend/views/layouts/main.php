@@ -7,6 +7,7 @@ use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use frontend\widgets\Alert;
 use common\models\User;
+use common\models\UserService;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -76,8 +77,9 @@ AppAsset::register($this);
                 ];
             }
             else {
-                $user = new User();
-                $menuItems = $user->getProjectItems();
+//                $user = new User();
+//                $menuItems = $user->getProjectItems();
+                $menuItems = UserService::getProjectItems();
             }
             echo Nav::widget([
                 'options' => ['class' => 'nav nav-sidebar'],
