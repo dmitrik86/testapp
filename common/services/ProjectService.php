@@ -1,5 +1,5 @@
 <?php
-namespace common\models;
+namespace common\services;
 
 use Yii;
 use common\models\Project;

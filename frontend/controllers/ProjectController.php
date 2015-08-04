@@ -3,9 +3,9 @@ namespace frontend\controllers;
 
 use Yii;
 use common\models\Project;
-use common\models\ProjectService;
 use common\models\Keyword;
-use common\models\ProjectKeywordRelation;
+use common\services\ProjectService;
+use common\services\ProjectKeywordRelation;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;

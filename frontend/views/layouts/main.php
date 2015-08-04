@@ -7,7 +7,7 @@ use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use frontend\widgets\Alert;
 use common\models\User;
-use common\models\UserService;
+use common\services\UserService;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
