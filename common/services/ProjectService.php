@@ -8,9 +8,9 @@ use common\models\Keyword;
 class ProjectService
 {
 
-    public function addProject(Project $project, $keywords) {
+    public function addProject(Project $project, $keywords, $userId) {
         $project->status = Project::STATUS_ACTIVE;
-        $project->user_id = Yii::$app->user->id;
+        $project->user_id = $userId;
         $keyword = new Keyword();
         $keywordsId = $keyword->getKeywordsIdByText($keywords);
         $project->setKeywords($keywordsId);
