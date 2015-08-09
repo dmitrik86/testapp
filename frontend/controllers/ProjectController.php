@@ -101,7 +101,7 @@ class ProjectController extends Controller
         $service = new ProjectService();
         $model = new Project();
         if($model->load(Yii::$app->request->post()) && $model->validate()) {
-        	$project_id = $service->addProject($model);
+        	$project_id = $service->addProject($model, Yii::$app->request->post('keywords'));
         	return $this->redirect(['project/view/' . $project_id . '/']);
         } else {
             return $this->render('addProject', [

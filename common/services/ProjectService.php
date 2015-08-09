@@ -8,11 +8,11 @@ use common\models\Keyword;
 class ProjectService
 {
 
-    public function addProject(Project $project) {
+    public function addProject(Project $project, $keywords) {
         $project->status = Project::STATUS_ACTIVE;
         $project->user_id = Yii::$app->user->id;
         $keyword = new Keyword();
-        $keywordsId = $keyword->getKeywordsIdByText(Yii::$app->request->post('keywords'));
+        $keywordsId = $keyword->getKeywordsIdByText($keywords);
         $project->setKeywords($keywordsId);
         $project->save();
 /*        if($keywordsId) {
