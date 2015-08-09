@@ -33,7 +33,7 @@ class Keyword extends \yii\db\ActiveRecord
         return [
             ['keyword', 'trim'],
             ['keyword', 'required', 'message' => 'Это поле обязательно'],
-            ['keyword', 'unique', 'targetClass' => '\common\models\Keyword', 'message' => 'Это ключевое слово уже есть в базе'],
+//            ['keyword', 'unique', 'targetClass' => '\common\models\Keyword', 'message' => 'Это ключевое слово уже есть в базе'],
             ['keyword', 'string', 'min' => 2, 'max' => 255, 'message' => 'Ключевое слово должно состоять минимум из 2  и максимум из 255 символов'],
         ];
     }
@@ -81,7 +81,7 @@ class Keyword extends \yii\db\ActiveRecord
         return $dataProvider;
     }
 
-
+/*
     public function getKeywordsIdByText($params)
     {
         $keywords = $this->getKeywordsArrayByText($params);
@@ -95,6 +95,32 @@ class Keyword extends \yii\db\ActiveRecord
                 else {
                     $keywordsId[] = $this->addKeyword($keyword);
                 }
+            }
+        }
+        if(isset($keywordsId) && $keywordsId)
+            return $keywordsId;
+        return false;
+    }
+*/
+    public function getKeywordsIdByText($params)
+    {
+        $keywords = $this->getKeywordsArrayByText($params);
+        if($keywords) {
+            $keywordsId = array();
+            foreach($keywords as $keyword) {
+                $keywordData = Keyword::findOne(['keyword' => $keyword]);
+                if($keywordData) {
+                    $keywordsId[] = $keywordData->id;
+                }
+                else {
+                    $keywordsId[] = $this->addKeyword($keyword);
+                }
+/*
+                $model = new Keyword();
+                $model->keyword = $keyword;
+                $model->save();
+                $keywordsId[] = $model->id;
+*/
             }
         }
         if(isset($keywordsId) && $keywordsId)
@@ -125,6 +151,15 @@ class Keyword extends \yii\db\ActiveRecord
             return $keywords;
         return false;
     }
+/*
+    public function beforeSave($insert) {
+        if(parent::beforeSave($insert)) {
 
-
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+*/
 }

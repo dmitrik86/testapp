@@ -5,6 +5,7 @@ namespace common\models;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\data\ActiveDataProvider;
+use common\models\ProjectKeywordRelation;
 
 /**
  * This is the model class for table "product".
@@ -25,6 +26,8 @@ class Project extends \yii\db\ActiveRecord
     const STATUS_ACTIVE = 'active';
     const STATUS_DELETED = 'deleted';
     const STATUS_DISABLED = 'disabled';
+
+    protected $_keywords = [];
 
     /**
      * @inheritdoc
@@ -85,6 +88,22 @@ class Project extends \yii\db\ActiveRecord
             ->andFilterWhere(['like', 'user_id', $this->user_id]);
 
         return $dataProvider;
+    }
+
+
+    public function setKeywords($keywordsId)
+    {
+        $this->_keywords = (array)$keywordsId;
+    }
+
+    public function afterSave($insert, $changedAttributes) {
+        ProjectKeywordRelation::deleteAll(['project_id' => $this->id]);
+        $values = [];
+        foreach($this->_keywords as $id) {
+            $values[] = [$this->id, $id];
+        }
+        self::getDb()->createCommand()->batchInsert(ProjectKeywordRelation::tableName(), ['project_id', 'keyword_id'], $values)->execute();
+        parent::afterSave($insert, $changedAttributes);
     }
 
 }
